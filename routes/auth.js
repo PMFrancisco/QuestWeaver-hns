@@ -17,9 +17,13 @@ const prisma = require("../prisma");
  *           schema:
  *             type: object
  *             required:
+ *               - username
  *               - email
  *               - password
  *             properties:
+ *               name:
+ *                 type:  string
+ *                 description: User's username
  *               email:
  *                 type: string
  *                 format: email
@@ -39,6 +43,7 @@ router.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const newUser = await prisma.user.create({
       data: {
+        name: req.body.name,
         email: req.body.email,
         password: hashedPassword,
       },
@@ -113,6 +118,28 @@ router.get("/login-page", (req, res) => {
  */
 router.get("/register-page", (req, res) => {
   res.render("register", { error: req.flash("error") });
+});
+
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  (req, res) => {
+    res.redirect("/profile");
+  }
+);
+
+router.get("/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
 });
 
 module.exports = router;

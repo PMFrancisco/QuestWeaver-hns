@@ -4,9 +4,10 @@ const router = express.Router();
 const isAuthenticated = require('../middlewares/isAuthenticated');
 
 router.get('/', isAuthenticated, function(req, res, next) {
-  res.render('index', { title: 'Express project template' });
+  res.render('index', { title: 'Quest Weaver' });
 });
 
 router.use('/auth', require('./auth'));
+router.use('/profile', isAuthenticated, require('./user'));
 
 module.exports = router;

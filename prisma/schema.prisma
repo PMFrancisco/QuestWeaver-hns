@@ -10,56 +10,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model User {
-  id            String           @id @default(uuid())
-  email         String           @unique
-  password      String?          
-  googleId      String?          
-  name          String?
-  profileImage  String?
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  isAdmin       Boolean          @default(false)
-  games         Game[]
-  participants  GameParticipant[]
+  id           String            @id @default(uuid())
+  email        String            @unique
+  password     String?
+  googleId     String?           @unique
+  firstName    String            
+  lastName     String            
+  displayName  String            
+  profileImage String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  isAdmin      Boolean           @default(false)
+  games        Game[]
+  participants GameParticipant[]
 }
 
 model Game {
-  id             String            @id @default(uuid())
-  name           String
-  description    String?
-  createdAt      DateTime          @default(now())
-  creatorId      String
-  creator        User              @relation(fields: [creatorId], references: [id])
-  maps           Map[]
-  participants   GameParticipant[]
-  tokens         Token[] 
+  id           String            @id @default(uuid())
+  name         String
+  description  String?
+  createdAt    DateTime          @default(now())
+  creatorId    String
+  creator      User              @relation(fields: [creatorId], references: [id])
+  maps         Map[]
+  participants GameParticipant[]
+  tokens       Token[]
 }
 
 model Map {
-  id             String    @id @default(uuid())
-  name           String
-  mapData        Json
-  gameId         String
-  game           Game      @relation(fields: [gameId], references: [id])
+  id      String @id @default(uuid())
+  name    String
+  mapData Json
+  gameId  String
+  game    Game   @relation(fields: [gameId], references: [id])
 }
 
 model GameParticipant {
-  id             String    @id @default(uuid())
-  userId         String
-  user           User      @relation(fields: [userId], references: [id])
-  gameId         String
-  game           Game      @relation(fields: [gameId], references: [id])
-  role           String
-  joinedAt       DateTime  @default(now())
+  id       String   @id @default(uuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  gameId   String
+  game     Game     @relation(fields: [gameId], references: [id])
+  role     String
+  joinedAt DateTime @default(now())
 }
 
 model Token {
-  id             String    @id @default(uuid())
-  type           String
-  tokenData      Json
-  gameId         String
-  game           Game      @relation(fields: [gameId], references: [id])
+  id        String @id @default(uuid())
+  type      String
+  tokenData Json
+  gameId    String
+  game      Game   @relation(fields: [gameId], references: [id])
 }

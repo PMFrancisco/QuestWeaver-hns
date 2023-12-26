@@ -19,6 +19,15 @@ const hbs = create({
   helpers: require('./utils/helpers')
 });
 
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
+cloudinary.config({ 
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
@@ -32,6 +41,7 @@ app.use(session({
 }));
 
 // view engine setup
+app.engine("hbs", hbs.engine);  
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
