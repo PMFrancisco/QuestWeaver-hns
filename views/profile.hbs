@@ -1,7 +1,8 @@
     <h1>Profile</h1>
+    <img src="{{user.profileImage}}" alt="Profile Image">
     <p>username: {{user.displayName}}</p>
     <p>userId: {{user.id}}</p>
-    <p>User since:{{user.createdAt}}</p>
+    <p>User since:{{formatDate user.createdAt}}</p>
 {{!-- <div>
   <h2>Your games:</h2>
   <ul>
@@ -13,3 +14,4 @@
 </div> --}}
 
 <a href="/auth/logout">Logout</a>
+<a href="/profile/edit">Edit Profile</a>

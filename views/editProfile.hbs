@@ -1,17 +1,48 @@
 <h1>Editar Perfil</h1>
-    
-    <form action="/profile/edit?_method=PUT" method="POST">
-        <div>
-            <label for="firstName">Nombre:</label>
-            <input type="text" id="firstName" name="firstName" value="{{user.firstName}}" required>
-        </div>
-        <div>
-            <label for="lastName">Apellido:</label>
-            <input type="text" id="lastName" name="lastName" value="{{user.lastName}}" required>
-        </div>
-        <div>
-            <label for="displayName">Nombre de Usuario:</label>
-            <input type="text" id="displayName" name="displayName" value="{{user.displayName}}" required>
-        </div>
-        <button type="submit">Actualizar Perfil</button>
-    </form>
+
+<form action="/profile/edit?_method=PUT" method="POST">
+  <div>
+    <label for="firstName">Nombre:</label>
+    <input
+      type="text"
+      id="firstName"
+      name="firstName"
+      value="{{user.firstName}}"
+      required
+    />
+  </div>
+  <div>
+    <label for="lastName">Apellido:</label>
+    <input
+      type="text"
+      id="lastName"
+      name="lastName"
+      value="{{user.lastName}}"
+      required
+    />
+  </div>
+  <div>
+    <label for="displayName">Nombre de Usuario:</label>
+    <input
+      type="text"
+      id="displayName"
+      name="displayName"
+      value="{{user.displayName}}"
+      required
+    />
+  </div>
+
+  <button type="submit">Actualizar Perfil</button>
+</form>
+
+<form
+  action="/profile/updateProfilePicture"
+  method="POST"
+  enctype="multipart/form-data"
+>
+  <div>
+    <label for="profileImage">Select profile Image:</label>
+    <input type="file" id="profileImage" name="profileImage" required />
+  </div>
+  <button type="submit">Upload Image</button>
+</form>

@@ -46,6 +46,7 @@ passport.use(
           const firstName = profile.name.givenName;
           const lastName = profile.name.familyName;
           const displayName = profile.displayName || `${firstName} ${lastName}`;
+          const profileImage = profile.photos[0].value;
   
           user = await prisma.user.create({
             data: {
@@ -53,7 +54,8 @@ passport.use(
               email: profile.emails[0].value,
               firstName: firstName,
               lastName: lastName,
-              displayName: displayName
+              displayName: displayName,
+              profileImage: profileImage
             }
           });
         }
