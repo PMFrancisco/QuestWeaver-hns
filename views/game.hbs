@@ -1,0 +1,14 @@
+<main>
+  <div class="game-details-container">
+    <h1>{{capitalize game.name}}</h1>
+    <div class="game-description">
+      <p>{{game.description}}</p>
+      <p>Created: {{formatDate game.createdAt}}</p>
+          <form action="/games/joinGame" method="post">
+      <input type="hidden" name="gameId" value="{{game.id}}" />
+      <button type="submit">Unirse a Partida</button>
+    </form>
+    </div>
+  </div>
+
+</main>

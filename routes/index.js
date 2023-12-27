@@ -9,5 +9,6 @@ router.get('/', isAuthenticated, function(req, res, next) {
 
 router.use('/auth', require('./auth'));
 router.use('/profile', isAuthenticated, require('./user'));
+router.use('/games', isAuthenticated, require('./games'));
 
 module.exports = router;

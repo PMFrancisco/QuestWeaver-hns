@@ -1,17 +1,17 @@
+<main>
+  <div class="profile-container">
     <h1>Profile</h1>
-    <img src="{{user.profileImage}}" alt="Profile Image">
-    <p>username: {{user.displayName}}</p>
-    <p>userId: {{user.id}}</p>
-    <p>User since:{{formatDate user.createdAt}}</p>
-{{!-- <div>
-  <h2>Your games:</h2>
-  <ul>
-    {{#each posts}}
-        <li><a href="/posts/{{this.id}}">{{capitalize this.title}}</a></li>
-        <p>Created: {{formatDate this.createdAt}}</p>
-    {{/each}}
-  </ul>
-</div> --}}
-
-<a href="/auth/logout">Logout</a>
-<a href="/profile/edit">Edit Profile</a>
+    <img
+      src="{{user.profileImage}}"
+      alt="Profile Image"
+      class="profile-image"
+    />
+    <p>Username: {{user.displayName}}</p>
+    <p>User ID: {{user.id}}</p>
+    <p>User since: {{formatDate user.createdAt}}</p>
+    <div class="profile-actions">
+      <a href="/auth/logout" class="button">Logout</a>
+      <a href="/profile/edit" class="button">Edit Profile</a>
+    </div>
+  </div>
+</main>

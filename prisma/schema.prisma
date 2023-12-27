@@ -15,10 +15,10 @@ model User {
   email        String            @unique
   password     String?
   googleId     String?           @unique
-  firstName    String            
-  lastName     String            
-  displayName  String            
-  profileImage String?
+  firstName    String
+  lastName     String
+  displayName  String
+  profileImage String?           @default("https://res.cloudinary.com/du8nkdwcp/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1703686205/DALL_E_2023-12-27_15.08.43_-_A_less_cartoonish_and_more_artistically_drawn_medieval_potato_character._This_potato_has_a_slightly_more_realistic_appearance_with_subtle_cartoon_feat_ho7wtk.png")
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
   isAdmin      Boolean           @default(false)
