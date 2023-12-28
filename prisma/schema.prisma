@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -54,6 +51,7 @@ model GameParticipant {
   game     Game     @relation(fields: [gameId], references: [id])
   role     String
   joinedAt DateTime @default(now())
+  isAccepted Boolean @default(false)
 }
 
 model Token {

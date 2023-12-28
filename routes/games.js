@@ -17,6 +17,8 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+
 router.get("/:id", async (req, res) => {
   try {
     const game = await prisma.game.findUnique({
@@ -62,14 +64,15 @@ router.post("/joinGame", async (req, res) => {
         gameId: gameId,
         userId: userId,
         role: "Player",
+        isAccepted: false,
       },
     });
 
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: game.creator.email,
-      subject: `Nuevo participante en tu partida: ${game.name}`,
-      text: `Hola ${game.creatorId.firstName},\n\n${req.user.displayName} se ha unido a tu partida "${game.name}".`,
+      subject: `New player wants to join: ${game.name}`,
+      text: `Hola ${game.creatorId.firstName},\n\n${req.user.displayName} wants to join to "${game.name}".`,
     };
 
     await transporter.sendMail(mailOptions);

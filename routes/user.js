@@ -2,20 +2,8 @@ const express = require("express");
 const router = express.Router();
 const prisma = require("../prisma");
 
-const multer = require("multer");
-
-const storage = new multer.memoryStorage();
-const upload = multer({
-  storage,
-});
-
-const cloudinary = require("cloudinary").v2;
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+const upload = require("../config/multer");
+const cloudinary = require("../config/cloudinary");
 
 router.get("/", async (req, res) => {
   res.render("profile", { title: "Profile", user: req.user });

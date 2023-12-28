@@ -12,12 +12,15 @@ const passport = require('passport');
 const swaggerDocs = require('./config/swagger').swaggerDocs;
 const swaggerUi = require('./config/swagger').swaggerUi;
 
-const hbs = create({
-  extname: 'hbs',
-  defaultLayout: 'main',
-  partialsDir: 'views/partials',
-  helpers: require('./utils/helpers')
-});
+  const hbs = create({
+    extname: 'hbs',
+    defaultLayout: 'main',
+    partialsDir: 'views/partials',
+    helpers: require('./utils/helpers'),
+
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  });
 
 
 require('dotenv').config();

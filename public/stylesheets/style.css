@@ -161,3 +161,43 @@ button:hover {
 .submit-button:hover {
   background-color: #0056b3;
 }
+
+/*Canvas*/
+
+#game-container {
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #fff;
+  border: 2px solid #333;
+  position: relative; 
+}
+
+canvas {
+  width: 100%;
+  height: auto; 
+}
+
+.control-panel {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.control-button {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 5px 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.control-button:hover {
+  background-color: #0056b3;
+}

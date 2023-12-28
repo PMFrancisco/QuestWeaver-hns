@@ -1,0 +1,23 @@
+<div id="game-container">
+  <canvas id="game-board"></canvas>
+</div>
+<div id="control-panel">
+<form
+  action="/map/uploadMap"
+  method="POST"
+  enctype="multipart/form-data"
+>
+  <div>
+    <input type="hidden" name="gameId" value="{{game.id}}" /> 
+    <label for="mapImage">Select Map Image:</label>
+    <input type="file" id="mapImage" name="mapImage" accept="image/*" required />
+  </div>
+  <button type="submit">Upload Map</button>
+</form>
+
+
+  <button id="add-token">Añadir Ficha</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
+<script src="maps.js"></script>
