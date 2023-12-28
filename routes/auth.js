@@ -52,7 +52,6 @@ router.post("/register", async (req, res) => {
     });
     res.redirect("/auth/login-page");
   } catch (error) {
-    console.log(error);
     res.redirect("/auth/register-page");
   }
 });
