@@ -17,8 +17,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-
-
 router.get("/:id", async (req, res) => {
   try {
     const game = await prisma.game.findUnique({
