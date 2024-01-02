@@ -1,0 +1,36 @@
+<h1>Edit User</h1>
+<form action="/admin/users/edit/{{user.id}}" method="POST">
+  <div>
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" value="{{user.firstName}}" required>
+  </div>
+  <div>
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" value="{{user.lastName}}" required>
+  </div>
+  <div>
+    <label for="displayName">Display Name:</label>
+    <input type="text" id="displayName" name="displayName" value="{{user.displayName}}" required>
+  </div>
+
+  <div>
+    <label for="isAdmin">Admin:</label>
+    <input type="checkbox" id="isAdmin" name="isAdmin" {{#if user.isAdmin}}checked{{/if}}>
+  </div>
+
+  
+
+  <button type="submit">Update User</button>
+</form>
+
+<form
+  action="/admin/users/edit/{{user.id}}/updateProfilePicture"
+  method="POST"
+  enctype="multipart/form-data"
+>
+  <div>
+    <label for="profileImage">Select profile Image:</label>
+    <input type="file" id="profileImage" name="profileImage" required />
+  </div>
+  <button type="submit">Upload Image</button>
+</form>

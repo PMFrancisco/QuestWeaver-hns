@@ -40,7 +40,7 @@ router.post("/createGame", async (req, res) => {
       },
     });
 
-    res.redirect("/games/{{req.game.id}}");
+    res.redirect(`/games/${newGame.id}`);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error creating the game");

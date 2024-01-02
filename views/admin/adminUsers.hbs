@@ -1,0 +1,24 @@
+<h1>User Management</h1>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each users}}
+      <tr>
+        <td>{{this.id}}</td>
+        <td>{{this.email}}</td>
+        <td>{{this.name}}</td>
+        <td>
+          <a href="/admin/users/edit/{{this.id}}">Edit</a>
+          <a href="/admin/users/delete/{{this.id}}" onclick="return confirm('Are you sure?');">Delete</a>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

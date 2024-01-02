@@ -105,15 +105,13 @@ button:hover {
 .game-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; /* Adjust the gap as nee ded */
-  justify-content: center; /* Centers the items in the container */
+  gap: 20px;
+  justify-content: center;
   padding: 20px;
 }
 
 .game-item {
-  flex-basis: calc(
-    33.333% - 20px
-  ); /* Adjust for 3 items per row, accounting for gap */
+  flex-basis: calc(33.333% - 20px);
   background: #f4f4f4;
   padding: 15px;
   border-radius: 8px;

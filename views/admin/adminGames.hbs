@@ -1,0 +1,27 @@
+<h1>Game Management</h1>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each games}}
+      <tr>
+        <td>{{this.id}}</td>
+        <td>{{this.name}}</td>
+        <td>{{this.description}}</td>
+        <td>
+          <a href="/admin/games/edit/{{this.id}}">Edit</a>
+          <a
+            href="/admin/games/delete/{{this.id}}"
+            onclick="return confirm('Are you sure you want to delete this game?');"
+          >Delete</a>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

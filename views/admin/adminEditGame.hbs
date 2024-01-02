@@ -1,0 +1,15 @@
+<h1>Edit Game</h1>
+<form action="/admin/games/edit/{{game.id}}" method="POST">
+  <div>
+    <label for="name">Game Name:</label>
+    <input type="text" id="name" name="name" value="{{game.name}}" required />
+  </div>
+  <div>
+    <label for="description">Description:</label>
+    <textarea
+      id="description"
+      name="description"
+    >{{game.description}}</textarea>
+  </div>
+  <button type="submit">Update Game</button>
+</form>

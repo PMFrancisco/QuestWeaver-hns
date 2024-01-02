@@ -15,11 +15,11 @@ model User {
   firstName    String
   lastName     String
   displayName  String
-  profileImage String?           @default("https://res.cloudinary.com/du8nkdwcp/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1703686205/DALL_E_2023-12-27_15.08.43_-_A_less_cartoonish_and_more_artistically_drawn_medieval_potato_character._This_potato_has_a_slightly_more_realistic_appearance_with_subtle_cartoon_feat_ho7wtk.png")
+  profileImage String?           @default("https://res.cloudinary.com/du8nkdwcp/image/upload/v1703686205/DALL_E_2023-12-27_15.08.43_-_A_less_cartoonish_and_more_artistically_drawn_medieval_potato_character._This_potato_has_a_slightly_more_realistic_appearance_with_subtle_cartoon_feat_ho7wtk.png")
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
   isAdmin      Boolean           @default(false)
-  games        Game[]
+  games        Game[]            
   participants GameParticipant[]
 }
 
@@ -29,10 +29,10 @@ model Game {
   description  String?
   createdAt    DateTime          @default(now())
   creatorId    String
-  creator      User              @relation(fields: [creatorId], references: [id])
-  maps         Map[]
-  participants GameParticipant[]
-  tokens       Token[]
+  creator      User              @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  maps         Map[]             
+  participants GameParticipant[] 
+  tokens       Token[]           
 }
 
 model Map {
@@ -40,24 +40,25 @@ model Map {
   name    String
   mapData Json
   gameId  String
-  game    Game   @relation(fields: [gameId], references: [id])
+  game    Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
 }
 
 model GameParticipant {
-  id       String   @id @default(uuid())
-  userId   String
-  user     User     @relation(fields: [userId], references: [id])
-  gameId   String
-  game     Game     @relation(fields: [gameId], references: [id])
-  role     String
-  joinedAt DateTime @default(now())
-  isAccepted Boolean @default(false)
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameId     String
+  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  role       String
+  joinedAt   DateTime @default(now())
+  isAccepted Boolean  @default(false)
 }
 
 model Token {
-  id        String @id @default(uuid())
-  type      String
-  tokenData Json
-  gameId    String
-  game      Game   @relation(fields: [gameId], references: [id])
+  id       String  @id @default(uuid())
+  type     String
+  isCustom Boolean
+  gameId   String?
+  game     Game?   @relation(fields: [gameId], references: [id], onDelete: Cascade)
 }
+

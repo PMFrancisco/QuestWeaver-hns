@@ -3,7 +3,7 @@ const router = express.Router();
 const prisma = require("../prisma");
 
 const upload = require("../config/multer");
-const cloudinary = require("../config/cloudinary");
+const handleUpload = require("../middlewares/handleUpload");
 
 router.get("/", async (req, res) => {
   res.render("profile", { title: "Profile", user: req.user });
@@ -37,13 +37,6 @@ router.put("/edit", async (req, res) => {
   }
 });
 
-async function handleUpload(file) {
-  const res = await cloudinary.uploader.upload(file, {
-    resource_type: "auto",
-  });
-  return res.secure_url;
-}
-
 router.post(
   "/updateProfilePicture",
   upload.single("profileImage"),
@@ -55,11 +48,12 @@ router.post(
 
       await prisma.user.update({
         where: { id: req.user.id },
-        data: { profileImage: cldRes },
+        data: { profileImage: cldRes.secure_url },
       });
 
       res.redirect("/profile");
     } catch (error) {
+      console.log(error);
       res.redirect("/error");
     }
   }
