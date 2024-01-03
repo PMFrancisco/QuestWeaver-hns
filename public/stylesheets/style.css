@@ -157,9 +157,32 @@ button:hover {
 
 .submit-button:hover {
   background-color: #0056b3;
+  
 }
 
+/* Tables */
+table {
+  width: 90%;
+  border-collapse: collapse;
+  margin: 20px auto;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+img {
+  width: 50px;
+  height: auto;
+}
 /*Canvas*/
+
 
 #game-board {
   width: 90%;

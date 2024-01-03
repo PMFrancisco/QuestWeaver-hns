@@ -129,4 +129,32 @@ router.get("/games/delete/:id", async (req, res) => {
   }
 });
 
+router.get("/tokens", async (req, res) => {
+  try {
+    const tokens = await prisma.token.findMany();
+    res.render("admin/adminTokens", { tokens });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+router.post("/tokens/create", upload.single("tokenImage"), async (req, res) => {
+  try {
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+    const cldRes = await handleUpload(dataURI);
+
+    await prisma.token.create({
+      data: {
+        name: req.body.name,
+        imageUrl: cldRes.secure_url,
+        isCustom: false,
+      },
+    });
+    res.redirect("/admin/tokens");
+  } catch (error) {
+    console.error(error);
+    res.redirect("/admin/error");
+  }
+});
 module.exports = router;

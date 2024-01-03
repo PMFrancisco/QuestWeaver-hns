@@ -1,5 +1,14 @@
 <div id="game-board">
 </div>
+
+<div id="tokenList">
+  {{#each tokens}}
+    <button class="tokenButton" tokenImageUrl="{{this.imageUrl}}">
+      <img src="{{this.imageUrl}}" alt="{{this.name}}" />
+    </button>
+  {{/each}}
+</div>
+
 <div id="control-panel">
   <form action="/map/uploadMap" method="POST" enctype="multipart/form-data">
     <div>
@@ -18,8 +27,9 @@
 
   <button id="add-token">Añadir Ficha</button>
 </div>
+
 <script>
   const mapUrl = "{{mapUrl}}";
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
-<script src="../p5Canvas/maps.js"></script>
+<script src="../p5Canvas/mapCanvas.js"></script>

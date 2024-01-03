@@ -19,7 +19,7 @@ model User {
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
   isAdmin      Boolean           @default(false)
-  games        Game[]            
+  games        Game[]
   participants GameParticipant[]
 }
 
@@ -30,9 +30,9 @@ model Game {
   createdAt    DateTime          @default(now())
   creatorId    String
   creator      User              @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  maps         Map[]             
-  participants GameParticipant[] 
-  tokens       Token[]           
+  maps         Map[]
+  participants GameParticipant[]
+  tokens       Token[]
 }
 
 model Map {
@@ -56,9 +56,9 @@ model GameParticipant {
 
 model Token {
   id       String  @id @default(uuid())
-  type     String
+  name     String
+  imageUrl String
   isCustom Boolean
   gameId   String?
   game     Game?   @relation(fields: [gameId], references: [id], onDelete: Cascade)
 }
-
