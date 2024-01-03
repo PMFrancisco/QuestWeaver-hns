@@ -20,12 +20,6 @@ function preload() {
   });
 }
 
-function drawTokenImage(imageUrl) {
-  loadImage(imageUrl, (img) => {
-    currentTokenImage = img;
-  });
-}
-
 function mousePressed() {
   let onToken = false;
 
@@ -89,19 +83,40 @@ function mouseReleased() {
 
 function mouseWheel(event) {
   if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+    let prevScale = scaleMap;
     scaleMap += event.delta * -0.001;
     scaleMap = constrain(scaleMap, 0.5, 3);
+
+    let scaleFactor = scaleMap / prevScale;
+
+    tokens.forEach((token) => {
+      token.x =
+        (token.x + token.anchorX - mapX) * scaleFactor + mapX - token.anchorX;
+      token.y =
+        (token.y + token.anchorY - mapY) * scaleFactor + mapY - token.anchorY;
+    });
 
     return false;
   }
 }
 
 function keyPressed() {
+  let prevScale = scaleMap;
+
   if (key === "+") {
     scaleMap = constrain(scaleMap + 0.1, 0.5, 3);
   } else if (key === "-") {
     scaleMap = constrain(scaleMap - 0.1, 0.5, 3);
   }
+
+  let scaleFactor = scaleMap / prevScale;
+
+  tokens.forEach((token) => {
+    token.x =
+      (token.x + token.anchorX - mapX) * scaleFactor + mapX - token.anchorX;
+    token.y =
+      (token.y + token.anchorY - mapY) * scaleFactor + mapY - token.anchorY;
+  });
 }
 
 function setup() {
@@ -130,12 +145,17 @@ function addToken(imageUrl) {
     const newHeight = 50;
     const newWidth = newHeight * aspectRatio;
 
+    const anchorX = newWidth / 2;
+    const anchorY = newHeight / 2;
+
     tokens.push({
       img: img,
-      x: width / 2 - newWidth / 2,
-      y: height / 2 - newHeight / 2,
+      x: width / 2 - anchorX,
+      y: height / 2 - anchorY,
       w: newWidth,
       h: newHeight,
+      anchorX: anchorX,
+      anchorY: anchorY,
       dragging: false,
       offsetX: 0,
       offsetY: 0,
