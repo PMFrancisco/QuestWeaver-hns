@@ -28,7 +28,25 @@ router.get("/:id", async (req, res) => {
       res.render("maps", { mapUrl: null, game: { id: gameId }, tokens: [] });
     }
   } catch (error) {
-    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.get("/getTokens/:gameId", async (req, res) => {
+  const gameId = req.params.gameId;
+
+  try {
+    const map = await prisma.map.findFirst({
+      where: { gameId: gameId },
+      select: { mapData: true },
+    });
+
+    if (map && map.mapData && map.mapData.tokens) {
+      res.json(map.mapData.tokens);
+    } else {
+      res.status(404).send("No tokens found for this game");
+    }
+  } catch (error) {
     res.status(500).send("Internal Server Error");
   }
 });
@@ -71,8 +89,34 @@ router.post("/uploadMap", upload.single("mapImage"), async (req, res) => {
 
     res.redirect(`/map/${gameId}`);
   } catch (error) {
-    console.error(error);
     res.redirect("/error");
+  }
+});
+
+router.post("/saveTokens", async (req, res) => {
+  try {
+    const { gameId, tokens } = req.body;
+
+    const existingMap = await prisma.map.findFirst({
+      where: { gameId: gameId },
+    });
+
+    if (existingMap) {
+      await prisma.map.update({
+        where: { id: existingMap.id },
+        data: {
+          mapData: {
+            ...existingMap.mapData,
+            tokens: tokens,
+          },
+        },
+      });
+      res.json({ message: "Tokens updated successfully" });
+    } else {
+      res.status(404).json({ message: "Map not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 

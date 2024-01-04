@@ -78,6 +78,7 @@ function mouseDragged() {
 
 function mouseReleased() {
   tokens.forEach((token) => (token.dragging = false));
+  saveTokens();
   dragging = false;
 }
 
@@ -119,6 +120,22 @@ function keyPressed() {
   });
 }
 
+function doubleClicked() {
+  for (let i = 0; i < tokens.length; i++) {
+    let token = tokens[i];
+    if (
+      mouseX > token.x &&
+      mouseX < token.x + token.w &&
+      mouseY > token.y &&
+      mouseY < token.y + token.h
+    ) {
+      tokens.splice(i, 1);
+      saveTokens();
+      break;
+    }
+  }
+}
+
 function setup() {
   let canvas = createCanvas(boardWidth, boardHeight);
   canvas.parent("game-board");
@@ -139,27 +156,32 @@ function draw() {
     image(token.img, token.x, token.y, token.w, token.h);
   });
 }
+
+function generateUniqueId() {
+  return "token-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
+}
+
 function addToken(imageUrl) {
   loadImage(imageUrl, (img) => {
     const aspectRatio = img.width / img.height;
     const newHeight = 50;
     const newWidth = newHeight * aspectRatio;
 
-    const anchorX = newWidth / 2;
-    const anchorY = newHeight / 2;
-
     tokens.push({
+      id: generateUniqueId(),
       img: img,
-      x: width / 2 - anchorX,
-      y: height / 2 - anchorY,
+      imageUrl: imageUrl,
+      x: width / 2 - newWidth / 2,
+      y: height / 2 - newHeight / 2,
       w: newWidth,
       h: newHeight,
-      anchorX: anchorX,
-      anchorY: anchorY,
+      anchorX: newWidth / 2,
+      anchorY: newHeight / 2,
       dragging: false,
       offsetX: 0,
       offsetY: 0,
     });
+    saveTokens();
   });
 }
 
@@ -171,4 +193,77 @@ document.addEventListener("DOMContentLoaded", function () {
       addToken(imageUrl);
     });
   });
+});
+
+function getTokensData() {
+  const data = tokens.map((token) => {
+    return {
+      id: token.id,
+      x: token.x,
+      y: token.y,
+      w: token.w,
+      h: token.h,
+      imageUrl: token.imageUrl,
+    };
+  });
+  console.log("Datos de tokens:", data);
+  return data;
+}
+
+function saveTokens() {
+  console.log("Guardando tokens");
+  const tokensData = getTokensData();
+
+  fetch("/map/saveTokens", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ gameId, tokens: tokensData }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+function loadTokens(gameId) {
+  fetch("/map/getTokens/" + gameId)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("No se pudieron cargar los tokens");
+      }
+      return response.json();
+    })
+    .then((tokensData) => {
+      createTokensFromData(tokensData);
+    })
+    .catch((error) => console.error("Error al cargar tokens:", error));
+}
+function createTokensFromData(tokensData) {
+  tokensData.forEach((tokenData) => {
+    loadImage(tokenData.imageUrl, (img) => {
+      tokens.push({
+        id: tokenData.id,
+        img: img,
+        imageUrl: tokenData.imageUrl,
+        x: tokenData.x,
+        y: tokenData.y,
+        w: tokenData.w,
+        h: tokenData.h,
+        anchorX: tokenData.w / 2,
+        anchorY: tokenData.h / 2,
+        dragging: false,
+        offsetX: 0,
+        offsetY: 0,
+      });
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  loadTokens(gameId);
 });
