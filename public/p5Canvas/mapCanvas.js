@@ -20,6 +20,28 @@ function preload() {
   });
 }
 
+function setup() {
+  let canvas = createCanvas(boardWidth, boardHeight);
+  canvas.parent("game-board");
+  background(127);
+  loadMapData(gameId);
+}
+
+function draw() {
+  background(127);
+  if (imageLoaded) {
+    push();
+    translate(mapX, mapY);
+    scale(scaleMap);
+    image(mapImage, 0, 0);
+    pop();
+  }
+
+  tokens.forEach((token) => {
+    image(token.img, token.x, token.y, token.w, token.h);
+  });
+}
+
 function mousePressed() {
   let onToken = false;
 
@@ -78,7 +100,7 @@ function mouseDragged() {
 
 function mouseReleased() {
   tokens.forEach((token) => (token.dragging = false));
-  saveTokens();
+  saveMapStatus();
   dragging = false;
 }
 
@@ -130,31 +152,10 @@ function doubleClicked() {
       mouseY < token.y + token.h
     ) {
       tokens.splice(i, 1);
-      saveTokens();
+      saveMapStatus();
       break;
     }
   }
-}
-
-function setup() {
-  let canvas = createCanvas(boardWidth, boardHeight);
-  canvas.parent("game-board");
-  background(127);
-}
-
-function draw() {
-  background(127);
-  if (imageLoaded) {
-    push();
-    translate(mapX, mapY);
-    scale(scaleMap);
-    image(mapImage, 0, 0);
-    pop();
-  }
-
-  tokens.forEach((token) => {
-    image(token.img, token.x, token.y, token.w, token.h);
-  });
 }
 
 function generateUniqueId() {
@@ -181,7 +182,7 @@ function addToken(imageUrl) {
       offsetX: 0,
       offsetY: 0,
     });
-    saveTokens();
+    saveMapStatus();
   });
 }
 
@@ -210,16 +211,23 @@ function getTokensData() {
   return data;
 }
 
-function saveTokens() {
+function saveMapStatus() {
   console.log("Guardando tokens");
   const tokensData = getTokensData();
 
-  fetch("/map/saveTokens", {
+  const mapData = {
+    backgroundImageUrl: mapUrl,
+    tokens: tokensData,
+    mapPosition: { x: mapX, y: mapY },
+    mapScale: scaleMap,
+  };
+
+  fetch("/map/saveMapStatus", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ gameId, tokens: tokensData }),
+    body: JSON.stringify({ gameId, mapData }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -243,6 +251,32 @@ function loadTokens(gameId) {
     })
     .catch((error) => console.error("Error al cargar tokens:", error));
 }
+
+function loadMapData(gameId) {
+  fetch(`/map/getMapData/${gameId}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("No se pudo cargar los datos del mapa");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const { mapData } = data;
+
+      if (mapData) {
+        mapX = mapData.mapPosition.x;
+        mapY = mapData.mapPosition.y;
+        scaleMap = mapData.mapScale;
+        mapImage = loadImage(mapData.backgroundImageUrl, () => {
+          imageLoaded = true;
+        });
+      }
+    })
+    .catch((error) =>
+      console.error("Error al cargar los datos del mapa:", error)
+    );
+}
+
 function createTokensFromData(tokensData) {
   tokensData.forEach((tokenData) => {
     loadImage(tokenData.imageUrl, (img) => {

@@ -32,6 +32,25 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/getMapData/:gameId", async (req, res) => {
+  const gameId = req.params.gameId;
+
+  try {
+    const map = await prisma.map.findFirst({
+      where: { gameId: gameId },
+      select: { mapData: true },
+    });
+
+    if (map && map.mapData) {
+      res.json({ mapData: map.mapData });
+    } else {
+      res.status(404).send("No map data found for this game");
+    }
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 router.get("/getTokens/:gameId", async (req, res) => {
   const gameId = req.params.gameId;
 
@@ -93,9 +112,9 @@ router.post("/uploadMap", upload.single("mapImage"), async (req, res) => {
   }
 });
 
-router.post("/saveTokens", async (req, res) => {
+router.post("/saveMapStatus", async (req, res) => {
   try {
-    const { gameId, tokens } = req.body;
+    const { gameId, mapData } = req.body;
 
     const existingMap = await prisma.map.findFirst({
       where: { gameId: gameId },
@@ -107,11 +126,11 @@ router.post("/saveTokens", async (req, res) => {
         data: {
           mapData: {
             ...existingMap.mapData,
-            tokens: tokens,
+            ...mapData,
           },
         },
       });
-      res.json({ message: "Tokens updated successfully" });
+      res.json({ message: "Tokens and map data updated successfully" });
     } else {
       res.status(404).json({ message: "Map not found" });
     }
