@@ -112,6 +112,30 @@ router.post("/uploadMap", upload.single("mapImage"), async (req, res) => {
   }
 });
 
+router.post("/uploadToken", upload.single("tokenImage"), async (req, res) => {
+
+  const gameId = req.body.gameId;
+
+  try {
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+    const cldRes = await handleUpload(dataURI);
+
+    await prisma.token.create({
+      data: {
+        name: req.body.name,
+        imageUrl: cldRes.secure_url,
+        isCustom: true,
+        gameId: gameId,
+      },
+    });
+    res.redirect(`/map/${gameId}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 router.post("/saveMapStatus", async (req, res) => {
   try {
     const { gameId, mapData } = req.body;

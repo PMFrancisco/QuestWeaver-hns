@@ -25,7 +25,26 @@
     <button type="submit">Upload Map</button>
   </form>
 
-  <button id="add-token">Añadir Ficha</button>
+  <form action="/map/uploadToken" method="POST" enctype="multipart/form-data">
+    <div>
+      <label for="name">Token Name:</label>
+      <input type="text" id="name" name="name" required />
+    </div>
+    <div>
+      <input type="hidden" name="gameId" value="{{game.id}}" />
+
+      <label for="tokenImage">Token Image:</label>
+      <input
+        type="file"
+        id="tokenImage"
+        name="tokenImage"
+        accept="image/*"
+        required
+      />
+    </div>
+    <button type="submit">Upload Token</button>
+  </form>
+
 </div>
 
 <script>
