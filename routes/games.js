@@ -24,7 +24,6 @@ router.get("/:id", async (req, res) => {
     });
     res.render("game", { title: game.name, game });
   } catch (error) {
-    console.error(error);
     res.status(500).send("Error getting the game");
   }
 });
@@ -42,7 +41,6 @@ router.post("/createGame", async (req, res) => {
 
     res.redirect(`/games/${newGame.id}`);
   } catch (error) {
-    console.error(error);
     res.status(500).send("Error creating the game");
   }
 });
@@ -70,7 +68,7 @@ router.post("/joinGame", async (req, res) => {
       from: process.env.GMAIL_USER,
       to: game.creator.email,
       subject: `New player wants to join: ${game.name}`,
-      text: `Hola ${game.creatorId.firstName},\n\n${req.user.displayName} wants to join to "${game.name}".`,
+      text: `Hola ${game.creator.firstName},\n\n${req.user.displayName} wants to join to "${game.name}".`,
     };
 
     await transporter.sendMail(mailOptions);

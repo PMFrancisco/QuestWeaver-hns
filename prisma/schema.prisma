@@ -52,6 +52,8 @@ model GameParticipant {
   role       String
   joinedAt   DateTime @default(now())
   isAccepted Boolean  @default(false)
+
+  @@unique([userId, gameId])
 }
 
 model Token {

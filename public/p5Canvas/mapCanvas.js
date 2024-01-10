@@ -207,12 +207,10 @@ function getTokensData() {
       imageUrl: token.imageUrl,
     };
   });
-  console.log("Datos de tokens:", data);
   return data;
 }
 
 function saveMapStatus() {
-  console.log("Guardando tokens");
   const tokensData = getTokensData();
 
   const mapData = {
@@ -230,9 +228,7 @@ function saveMapStatus() {
     body: JSON.stringify({ gameId, mapData }),
   })
     .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
+    .then((data) => {})
     .catch((error) => {
       console.error("Error:", error);
     });

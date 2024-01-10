@@ -4,8 +4,9 @@ const prisma = require("../prisma");
 
 const upload = require("../config/multer");
 const handleUpload = require("../middlewares/handleUpload");
+const isAccepted = require("../middlewares/isAccepted");
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", isAccepted, async (req, res) => {
   try {
     const gameId = req.params.id;
 
@@ -113,7 +114,6 @@ router.post("/uploadMap", upload.single("mapImage"), async (req, res) => {
 });
 
 router.post("/uploadToken", upload.single("tokenImage"), async (req, res) => {
-
   const gameId = req.body.gameId;
 
   try {
