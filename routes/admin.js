@@ -1,9 +1,8 @@
 const express = require("express");
-const router = express.Router();
 const prisma = require("../prisma");
-
 const upload = require("../config/multer");
 const handleUpload = require("../middlewares/handleUpload");
+const router = express.Router();
 
 router.get("/", (req, res) => {
   res.render("admin/admin");
@@ -155,6 +154,17 @@ router.post("/tokens/create", upload.single("tokenImage"), async (req, res) => {
   } catch (error) {
     console.error(error);
     res.redirect("/admin/error");
+  }
+});
+
+router.get("/tokens/delete/:id", async (req, res) => {
+  const tokenId = req.params.id;
+  try {
+    await prisma.token.delete({ where: { id: tokenId } });
+    res.redirect("/admin/tokens");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 module.exports = router;

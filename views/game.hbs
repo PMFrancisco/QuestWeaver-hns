@@ -4,12 +4,42 @@
     <div class="game-description">
       <p>{{game.description}}</p>
       <p>Created: {{formatDate game.createdAt}}</p>
-          <form action="/games/joinGame" method="post">
-      <input type="hidden" name="gameId" value="{{game.id}}" />
-      <button type="submit">Unirse a Partida</button>
-      <a href="/map/{{game.id}}">Maps</a>
-    </form>
+      <form action="/games/joinGame" method="post">
+        <input type="hidden" name="gameId" value="{{game.id}}" />
+        <button type="submit">Join Game</button>
+        <a href="/map/{{game.id}}">Maps</a>
+      </form>
     </div>
   </div>
 
+  <div>
+    <h2>Players</h2>
+    <ul>
+      {{#each acceptedPlayers}}
+      <li>
+        <img src="{{this.user.profileImage}}" alt="Profile Image">
+        <span>{{this.user.displayName}}</span>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+
+{{#if isGameCreator}}
+<div>
+  <h2>Pending Players</h2>
+  <ul>
+    {{#each pendingPlayers}}
+    <li>
+      <img src="{{this.user.profileImage}}" alt="Profile Image">
+      <span>{{this.user.displayName}}</span>
+      <form action="/games/acceptPlayer" method="post">
+        <input type="hidden" name="gameId" value="{{../game.id}}">
+        <input type="hidden" name="userId" value="{{this.user.id}}">
+        <button type="submit">Accept</button>
+      </form>
+    </li>
+    {{/each}}
+  </ul>
+</div>
+{{/if}}
 </main>

@@ -4,9 +4,10 @@ const prisma = require("../prisma");
 
 const upload = require("../config/multer");
 const handleUpload = require("../middlewares/handleUpload");
-const isAccepted = require("../middlewares/isAccepted");
+const isGameCreator = require("../middlewares/isGameCreator");
+const isAcceptedOrGameCreator = require("../middlewares/isAcceptedOrGameCreator");
 
-router.get("/:id", isAccepted, async (req, res) => {
+router.get("/:id", isAcceptedOrGameCreator, async (req, res) => {
   try {
     const gameId = req.params.id;
 
@@ -71,47 +72,52 @@ router.get("/getTokens/:gameId", async (req, res) => {
   }
 });
 
-router.post("/uploadMap", upload.single("mapImage"), async (req, res) => {
-  try {
-    const b64 = Buffer.from(req.file.buffer).toString("base64");
-    let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-    const cldRes = await handleUpload(dataURI);
-    const mapUrl = cldRes.secure_url;
+router.post(
+  "/uploadMap",
+  isGameCreator,
+  upload.single("mapImage"),
+  async (req, res) => {
+    try {
+      const b64 = Buffer.from(req.file.buffer).toString("base64");
+      let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+      const cldRes = await handleUpload(dataURI);
+      const mapUrl = cldRes.secure_url;
 
-    const gameId = req.body.gameId;
+      const gameId = req.body.gameId;
 
-    const existingMap = await prisma.map.findFirst({
-      where: { gameId: gameId },
-    });
-
-    if (existingMap) {
-      await prisma.map.update({
-        where: { id: existingMap.id },
-        data: {
-          mapData: {
-            ...existingMap.mapData,
-            backgroundImageUrl: mapUrl,
-          },
-        },
+      const existingMap = await prisma.map.findFirst({
+        where: { gameId: gameId },
       });
-    } else {
-      await prisma.map.create({
-        data: {
-          name: "Map Name",
-          mapData: {
-            backgroundImageUrl: mapUrl,
-            tokens: [],
+
+      if (existingMap) {
+        await prisma.map.update({
+          where: { id: existingMap.id },
+          data: {
+            mapData: {
+              ...existingMap.mapData,
+              backgroundImageUrl: mapUrl,
+            },
           },
-          gameId: gameId,
-        },
-      });
+        });
+      } else {
+        await prisma.map.create({
+          data: {
+            name: "Map Name",
+            mapData: {
+              backgroundImageUrl: mapUrl,
+              tokens: [],
+            },
+            gameId: gameId,
+          },
+        });
+      }
+
+      res.redirect(`/map/${gameId}`);
+    } catch (error) {
+      res.redirect("/error");
     }
-
-    res.redirect(`/map/${gameId}`);
-  } catch (error) {
-    res.redirect("/error");
   }
-});
+);
 
 router.post("/uploadToken", upload.single("tokenImage"), async (req, res) => {
   const gameId = req.body.gameId;
