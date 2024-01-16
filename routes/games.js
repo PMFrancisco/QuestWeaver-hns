@@ -120,7 +120,7 @@ router.get("/:id", async (req, res) => {
       ? game.participants.filter((data) => !data.isAccepted)
       : [];
 
-    res.render("game", {
+    res.render("games/game", {
       title: game.name,
       game,
       acceptedPlayers,

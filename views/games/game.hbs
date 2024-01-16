@@ -7,7 +7,12 @@
       <form action="/games/joinGame" method="post">
         <input type="hidden" name="gameId" value="{{game.id}}" />
         <button type="submit">Join Game</button>
-        <a href="/map/{{game.id}}">Maps</a>
+      </form>
+      <form action="/gameInfo/{{game.id}}" method="get">
+        <button type="submit">Wiki</button>
+      </form>
+      <form action="/map/{{game.id}}" method="get">
+        <button type="submit">Maps</button>
       </form>
     </div>
   </div>

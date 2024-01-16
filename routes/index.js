@@ -12,6 +12,7 @@ router.use('/auth', require('./auth'));
 router.use('/profile', isAuthenticated, require('./user'));
 router.use('/games', isAuthenticated, require('./games'));
 router.use('/map', isAuthenticated, require('./maps'));
+router.use('/gameInfo', isAuthenticated, require('./gameInfo'));
 router.use('/admin', isAdmin, require('./admin'));
 
 

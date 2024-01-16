@@ -158,9 +158,6 @@ function doubleClicked() {
   }
 }
 
-function generateUniqueId() {
-  return "token-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
-}
 
 function addToken(imageUrl) {
   loadImage(imageUrl, (img) => {
@@ -169,7 +166,6 @@ function addToken(imageUrl) {
     const newWidth = newHeight * aspectRatio;
 
     tokens.push({
-      id: generateUniqueId(),
       img: img,
       imageUrl: imageUrl,
       x: width / 2 - newWidth / 2,

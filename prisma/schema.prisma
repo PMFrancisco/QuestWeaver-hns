@@ -33,6 +33,7 @@ model Game {
   maps         Map[]
   participants GameParticipant[]
   tokens       Token[]
+  gameInfo     GameInfo[]
 }
 
 model Map {
@@ -63,4 +64,26 @@ model Token {
   isCustom Boolean
   gameId   String?
   game     Game?   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id        String     @id @default(uuid())
+  name      String
+  gameId    String
+  parentId  String?
+  parent    Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryToCategory")
+  gameInfos GameInfo[]
+}
+
+model GameInfo {
+  id         String   @id @default(uuid())
+  gameId     String
+  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  title      String
+  content    String
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

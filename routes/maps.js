@@ -21,13 +21,13 @@ router.get("/:id", isAcceptedOrGameCreator, async (req, res) => {
     });
 
     if (map) {
-      res.render("maps", {
+      res.render("games/maps", {
         mapUrl: map.mapData.backgroundImageUrl,
         game: { id: gameId },
         tokens: tokens,
       });
     } else {
-      res.render("maps", { mapUrl: null, game: { id: gameId }, tokens: [] });
+      res.render("games/maps", { mapUrl: null, game: { id: gameId }, tokens: [] });
     }
   } catch (error) {
     res.status(500).send("Internal Server Error");
