@@ -157,7 +157,6 @@ button:hover {
 
 .submit-button:hover {
   background-color: #0056b3;
-  
 }
 
 /* Tables */
@@ -167,7 +166,8 @@ table {
   margin: 20px auto;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
@@ -182,7 +182,6 @@ img {
   height: auto;
 }
 /*Canvas*/
-
 
 #game-board {
   width: 90%;
@@ -224,4 +223,21 @@ canvas {
 
 .hidden {
   display: none;
+}
+
+/* Wiki */
+
+.wiki-container {
+  display: flex;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.wiki-sidebar {
+  flex: 1;
+}
+
+.wiki-content {
+  flex: 2;
+  padding: 20px;
 }

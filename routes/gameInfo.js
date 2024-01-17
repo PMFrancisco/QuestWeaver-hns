@@ -2,24 +2,35 @@ const express = require("express");
 const router = express.Router();
 const prisma = require("../prisma");
 
-router.get("/new/:gameId", (req, res) => {
-  const gameId = req.params.gameId;
-  res.render("gameInfo/createGameInfo", { gameId });
+router.get("/newGameInfo/:gameId/:categoryId", async (req, res) => {
+  const { gameId, categoryId } = req.params;
+  try {
+    const categories = await prisma.category.findMany({
+      where: { parentId: null },
+      include: { children: true },
+    });
+    res.render("gameInfo/createGameInfo", { categories, gameId, categoryId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error loading the page");
+  }
 });
 
-router.post("/create", async (req, res) => {
-  const { title, content, gameId } = req.body;
+router.post("/createGameInfo", async (req, res) => {
+  const { title, content, categoryId, gameId } = req.body;
   try {
-    const newGameInfo = await prisma.gameInfo.create({
+    await prisma.gameInfo.create({
       data: {
-        title,
-        content,
-        gameId,
+        title: title,
+        content: content,
+        categoryId: categoryId,
+        gameId: gameId,
       },
     });
-    res.redirect("/new/:gameId");
+    res.redirect(`/gameInfo/${gameId}`);
   } catch (error) {
-    res.status(500).send("Error creating the wiki entry");
+    console.error(error);
+    res.status(500).send("Error creating GameInfo");
   }
 });
 
@@ -46,9 +57,21 @@ router.get("/:gameId", async (req, res) => {
   try {
     const categories = await prisma.category.findMany({
       where: { gameId: gameId, parentId: null },
-      include: { children: true },
+      include: {
+        children: {
+          include: {
+            gameInfos: true,
+          },
+        },
+        gameInfos: true,
+      },
     });
-    res.render("gameInfo/mainWiki", { categories, gameId });
+
+    const game = await prisma.game.findUnique({
+      where: { id: gameId },
+    });
+
+    res.render("gameInfo/mainWiki", { categories, gameId, game });
   } catch (error) {
     console.log(error);
     res.status(500).send("Error loading the wiki");

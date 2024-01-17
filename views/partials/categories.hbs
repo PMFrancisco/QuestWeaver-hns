@@ -6,16 +6,49 @@
     <input type="hidden" name="parentId" value="" />
     <button type="submit">Add category</button>
   </form>
+
   <ul class="categories-list">
     {{#each categories}}
       <li class="category-item">
         <div
           class="category-name"
-          onclick="toggleSubcategories('subcategory-form-{{this.id}}', 'subcategory-list-{{this.id}}')"
+          onclick="toggleSubcategories('group-{{this.id}}')"
         >
-          {{this.name}}
+          <h3>{{this.name}}</h3>
         </div>
-        <div id="subcategory-form-{{this.id}}" class="hidden">
+
+        <div id="group-{{this.id}}" class="hidden">
+          <ul class="subcategories-and-entries">
+            {{#each this.children}}
+              <li class="subcategory-item">
+                <div
+                  class="subcategory-name"
+                  onclick="toggleSubcategories('gameinfo-form-{{this.id}}')"
+                >
+                  <h4>{{this.name}}</h4>
+                </div>
+                <div id="gameinfo-form-{{this.id}}" class="hidden">
+                  <ul id="gameinfo-list-{{this.id}}">
+                    {{#each this.gameInfos}}
+                      <li class="gameinfo-item">
+                        {{this.title}}
+                      </li>
+                    {{/each}}
+                  </ul>
+                  <button
+                    onclick="location.href='/gameInfo/newGameInfo/{{gameId}}/{{this.id}}'"
+                  >New Entry</button>
+
+                </div>
+              </li>
+            {{/each}}
+            {{#each this.gameInfos}}
+              <li class="gameinfo-item">
+                {{this.title}}
+              </li>
+            {{/each}}
+          </ul>
+
           <form action="/gameInfo/addCategory" method="post">
             <input
               type="text"
@@ -25,17 +58,13 @@
             />
             <input type="hidden" name="gameId" value="{{gameId}}" />
             <input type="hidden" name="parentId" value="{{this.id}}" />
-
             <button type="submit">Add Subcategory</button>
           </form>
 
+          <button
+            onclick="location.href='/gameInfo/newGameInfo/{{gameId}}/{{this.id}}'"
+          >New Entry</button>
         </div>
-
-        <ul id="subcategory-list-{{this.id}}" class="subcategories hidden">
-          {{#each this.children}}
-            <li>{{this.name}}</li>
-          {{/each}}
-        </ul>
       </li>
     {{/each}}
   </ul>

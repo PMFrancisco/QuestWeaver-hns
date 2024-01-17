@@ -1,12 +1,7 @@
-function toggleSubcategories(formId, listId) {
-  var form = document.getElementById(formId);
-  var list = document.getElementById(listId);
+function toggleSubcategories(elementId) {
+  var element = document.getElementById(elementId);
 
-  if (form) {
-    form.classList.toggle("hidden");
-  }
-
-  if (list) {
-    list.classList.toggle("hidden");
+  if (element) {
+    element.classList.toggle("hidden");
   }
 }
