@@ -229,7 +229,7 @@ canvas {
 
 .wiki-container {
   display: flex;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -240,4 +240,8 @@ canvas {
 .wiki-content {
   flex: 2;
   padding: 20px;
+}
+
+a {
+  text-decoration: none;
 }

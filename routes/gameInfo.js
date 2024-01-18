@@ -181,6 +181,22 @@ router.post("/addCategory", async (req, res) => {
   }
 });
 
+router.get("/deleteCategory/:categoryId", async (req, res) => {
+  const categoryId = req.params.categoryId;
+
+  try {
+    await prisma.category.delete({
+      where: { id: categoryId },
+    });
+
+    res.redirect('back');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al eliminar la categoría");
+  }
+});
+
+
 router.get("/:gameId", async (req, res) => {
   const gameId = req.params.gameId;
 

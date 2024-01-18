@@ -79,11 +79,12 @@ model Category {
 model GameInfo {
   id         String   @id @default(uuid())
   gameId     String
-  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  game       Game     @relation(fields: [gameId], references: [id])
   title      String
   content    String
   categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+

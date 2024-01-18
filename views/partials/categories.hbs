@@ -14,7 +14,11 @@
           class="category-name"
           onclick="toggleSubcategories('group-{{this.id}}')"
         >
-          <h3>{{this.name}}</h3>
+          <h3>{{this.name}}<a
+              href="/gameInfo/deleteCategory/{{this.id}}"
+              onclick="return confirm('Are you sure you want to delete this entry?');"
+            >🗑️</a></h3>
+
         </div>
 
         <div id="group-{{this.id}}" class="hidden">
@@ -25,7 +29,11 @@
                   class="subcategory-name"
                   onclick="toggleSubcategories('gameinfo-form-{{this.id}}')"
                 >
-                  <h4>{{this.name}}</h4>
+                  <h4>{{this.name}}<a
+                      href="/gameInfo/deleteCategory/{{this.id}}"
+                      onclick="return confirm('Are you sure you want to delete this entry?');"
+                    >🗑️</a></h4>
+
                 </div>
                 <div id="gameinfo-form-{{this.id}}" class="hidden">
                   <ul id="gameinfo-list-{{this.id}}">
