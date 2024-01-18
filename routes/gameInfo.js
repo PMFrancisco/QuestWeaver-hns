@@ -33,6 +33,86 @@ router.get("/newGameInfo/:gameId/:categoryId", async (req, res) => {
   }
 });
 
+router.get("/edit/:gameInfoId", async (req, res) => {
+  const gameInfoId = req.params.gameInfoId;
+
+  try {
+    const gameInfo = await prisma.gameInfo.findUnique({
+      where: { id: gameInfoId },
+    });
+
+    const categories = await prisma.category.findMany({
+      where: { parentId: null },
+      include: {
+        children: {
+          include: {
+            gameInfos: true,
+          },
+        },
+        gameInfos: true,
+      },
+    });
+
+    if (!gameInfo) {
+      res.status(404).send("GameInfo not found");
+      return;
+    }
+
+    res.render("gameInfo/editGameInfo", { gameInfo, categories });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving GameInfo for editing");
+  }
+});
+
+
+
+router.post("/update/:gameInfoId", async (req, res) => {
+  const gameInfoId = req.params.gameInfoId;
+  const { title, content } = req.body;
+
+  try {
+    await prisma.gameInfo.update({
+      where: { id: gameInfoId },
+      data: { title, content },
+    });
+
+    res.redirect(`/gameinfo/view/${gameInfoId}`); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating GameInfo");
+  }
+});
+
+
+router.get("/delete/:gameInfoId", async (req, res) => {
+  const gameInfoId = req.params.gameInfoId;
+
+  try {
+    const gameInfo = await prisma.gameInfo.findUnique({
+      where: { id: gameInfoId },
+      include: {
+        category: true, 
+      },
+    }); 
+
+    const gameId = gameInfo.category.gameId;
+
+    await prisma.gameInfo.delete({
+      where: { id: gameInfoId },
+    });
+
+    res.redirect(`/gameInfo/${gameId}`); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting entry");
+  }
+});
+
+
+
+
+
 router.get("/view/:gameInfoId", async (req, res) => {
   const gameInfoId = req.params.gameInfoId;
 
@@ -53,12 +133,18 @@ router.get("/view/:gameInfoId", async (req, res) => {
       },
     });
 
+    if (!gameInfo) {
+      res.status(404).send("Entry not found");
+      return;
+    }
+
     res.render("gameInfo/viewGameInfo", { gameInfo, categories });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving GameInfo");
   }
 });
+
 
 router.post("/createGameInfo", async (req, res) => {
   const { title, content, categoryId, gameId } = req.body;
@@ -74,7 +160,7 @@ router.post("/createGameInfo", async (req, res) => {
     res.redirect(`/gameInfo/${gameId}`);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error creating GameInfo");
+    res.status(500).send("Error creating entry");
   }
 });
 

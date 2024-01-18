@@ -1,9 +1,15 @@
 <div class="wiki-container">
   <aside class="wiki-sidebar">
-    {{>categories}}
+    {{> categories}}
   </aside>
   <div class="wiki-content">
-    <h2>{{gameInfo.title}}</h2>
+    <h2>{{gameInfo.title}}
+      <a href="/gameInfo/edit/{{gameInfo.id}}">✏️</a>
+      <a
+        href="/gameInfo/delete/{{gameInfo.id}}"
+        onclick="return confirm('Are you sure you want to delete this entry?');"
+      >🗑️</a>
+    </h2>
     <p>{{gameInfo.content}}</p>
   </div>
 </div>
