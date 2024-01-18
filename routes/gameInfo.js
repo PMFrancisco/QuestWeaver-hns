@@ -5,16 +5,45 @@ const prisma = require("../prisma");
 router.get("/newGameInfo/:gameId/:categoryId", async (req, res) => {
   const { gameId, categoryId } = req.params;
   try {
+    // Amplía esta consulta para incluir los GameInfos si son necesarios
     const categories = await prisma.category.findMany({
       where: { parentId: null },
-      include: { children: true },
+      include: {
+        children: {
+          include: {
+            gameInfos: true // Incluye los GameInfo para las subcategorías
+          }
+        },
+        gameInfos: true // Incluye los GameInfo para las categorías principales
+      }
     });
-    res.render("gameInfo/createGameInfo", { categories, gameId, categoryId });
+
+    // Si necesitas detalles adicionales del juego o la categoría específica, añádelos aquí
+    const game = await prisma.game.findUnique({
+      where: { id: gameId },
+      // Incluye relaciones adicionales si son necesarias
+    });
+
+    // Si es necesario, obtén detalles adicionales de la categoría específica
+    const categoryDetails = await prisma.category.findUnique({
+      where: { id: categoryId },
+      // Incluye relaciones adicionales si son necesarias
+    });
+
+    res.render("gameInfo/createGameInfo", {
+      categories,
+      game,
+      categoryDetails, // Añade esto si necesitas detalles específicos de la categoría
+      gameId,
+      categoryId
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error loading the page");
   }
 });
+
+
 
 router.post("/createGameInfo", async (req, res) => {
   const { title, content, categoryId, gameId } = req.body;
