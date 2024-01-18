@@ -5,37 +5,27 @@ const prisma = require("../prisma");
 router.get("/newGameInfo/:gameId/:categoryId", async (req, res) => {
   const { gameId, categoryId } = req.params;
   try {
-    // Amplía esta consulta para incluir los GameInfos si son necesarios
     const categories = await prisma.category.findMany({
       where: { parentId: null },
       include: {
         children: {
           include: {
-            gameInfos: true // Incluye los GameInfo para las subcategorías
-          }
+            gameInfos: true,
+          },
         },
-        gameInfos: true // Incluye los GameInfo para las categorías principales
-      }
+        gameInfos: true,
+      },
     });
 
-    // Si necesitas detalles adicionales del juego o la categoría específica, añádelos aquí
     const game = await prisma.game.findUnique({
       where: { id: gameId },
-      // Incluye relaciones adicionales si son necesarias
-    });
-
-    // Si es necesario, obtén detalles adicionales de la categoría específica
-    const categoryDetails = await prisma.category.findUnique({
-      where: { id: categoryId },
-      // Incluye relaciones adicionales si son necesarias
     });
 
     res.render("gameInfo/createGameInfo", {
       categories,
       game,
-      categoryDetails, // Añade esto si necesitas detalles específicos de la categoría
       gameId,
-      categoryId
+      categoryId,
     });
   } catch (error) {
     console.error(error);
@@ -43,7 +33,32 @@ router.get("/newGameInfo/:gameId/:categoryId", async (req, res) => {
   }
 });
 
+router.get("/view/:gameInfoId", async (req, res) => {
+  const gameInfoId = req.params.gameInfoId;
 
+  try {
+    const gameInfo = await prisma.gameInfo.findUnique({
+      where: { id: gameInfoId },
+    });
+
+    const categories = await prisma.category.findMany({
+      where: { parentId: null },
+      include: {
+        children: {
+          include: {
+            gameInfos: true,
+          },
+        },
+        gameInfos: true,
+      },
+    });
+
+    res.render("gameInfo/viewGameInfo", { gameInfo, categories });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving GameInfo");
+  }
+});
 
 router.post("/createGameInfo", async (req, res) => {
   const { title, content, categoryId, gameId } = req.body;
