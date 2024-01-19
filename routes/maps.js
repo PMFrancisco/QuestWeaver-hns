@@ -184,7 +184,6 @@ router.get("/getTokens/:gameId", async (req, res) => {
 
 router.post(
   "/uploadMap",
-  isGameCreator,
   upload.single("mapImage"),
   async (req, res) => {
     try {
