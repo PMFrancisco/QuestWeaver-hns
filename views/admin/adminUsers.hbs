@@ -16,7 +16,10 @@
         <td>{{this.displayName}}</td>
         <td>
           <a href="/admin/users/edit/{{this.id}}">Edit</a>
-          <a href="/admin/users/delete/{{this.id}}" onclick="return confirm('Are you sure?');">Delete</a>
+          <a
+            href="/admin/users/delete/{{this.id}}"
+            onclick="return confirm('Are you sure?');"
+          >Delete</a>
         </td>
       </tr>
     {{/each}}

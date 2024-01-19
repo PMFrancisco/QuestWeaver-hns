@@ -1,8 +1,8 @@
-<h1>Editar Perfil</h1>
+<h1>Edit Profile</h1>
 
 <form action="/profile/edit?_method=PUT" method="POST">
   <div>
-    <label for="firstName">Nombre:</label>
+    <label for="firstName">First Name:</label>
     <input
       type="text"
       id="firstName"
@@ -12,7 +12,7 @@
     />
   </div>
   <div>
-    <label for="lastName">Apellido:</label>
+    <label for="lastName">Last Name:</label>
     <input
       type="text"
       id="lastName"
@@ -22,7 +22,7 @@
     />
   </div>
   <div>
-    <label for="displayName">Nombre de Usuario:</label>
+    <label for="displayName">Username:</label>
     <input
       type="text"
       id="displayName"
@@ -32,7 +32,7 @@
     />
   </div>
 
-  <button type="submit">Actualizar Perfil</button>
+  <button type="submit">Update Profile</button>
 </form>
 
 <form
@@ -41,7 +41,7 @@
   enctype="multipart/form-data"
 >
   <div>
-    <label for="profileImage">Select profile Image:</label>
+    <label for="profileImage">Select Profile Image:</label>
     <input type="file" id="profileImage" name="profileImage" required />
   </div>
   <button type="submit">Upload Image</button>

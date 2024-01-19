@@ -65,8 +65,6 @@ router.get("/edit/:gameInfoId", async (req, res) => {
   }
 });
 
-
-
 router.post("/update/:gameInfoId", async (req, res) => {
   const gameInfoId = req.params.gameInfoId;
   const { title, content } = req.body;
@@ -77,13 +75,12 @@ router.post("/update/:gameInfoId", async (req, res) => {
       data: { title, content },
     });
 
-    res.redirect(`/gameinfo/view/${gameInfoId}`); 
+    res.redirect(`/gameinfo/view/${gameInfoId}`);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error updating GameInfo");
   }
 });
-
 
 router.get("/delete/:gameInfoId", async (req, res) => {
   const gameInfoId = req.params.gameInfoId;
@@ -92,9 +89,9 @@ router.get("/delete/:gameInfoId", async (req, res) => {
     const gameInfo = await prisma.gameInfo.findUnique({
       where: { id: gameInfoId },
       include: {
-        category: true, 
+        category: true,
       },
-    }); 
+    });
 
     const gameId = gameInfo.category.gameId;
 
@@ -102,16 +99,12 @@ router.get("/delete/:gameInfoId", async (req, res) => {
       where: { id: gameInfoId },
     });
 
-    res.redirect(`/gameInfo/${gameId}`); 
+    res.redirect(`/gameInfo/${gameId}`);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error deleting entry");
   }
 });
-
-
-
-
 
 router.get("/view/:gameInfoId", async (req, res) => {
   const gameInfoId = req.params.gameInfoId;
@@ -144,7 +137,6 @@ router.get("/view/:gameInfoId", async (req, res) => {
     res.status(500).send("Error retrieving GameInfo");
   }
 });
-
 
 router.post("/createGameInfo", async (req, res) => {
   const { title, content, categoryId, gameId } = req.body;
@@ -189,13 +181,12 @@ router.get("/deleteCategory/:categoryId", async (req, res) => {
       where: { id: categoryId },
     });
 
-    res.redirect('back');
+    res.redirect("back");
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error al eliminar la categoría");
+    res.status(500).send("Error deleting category");
   }
 });
-
 
 router.get("/:gameId", async (req, res) => {
   const gameId = req.params.gameId;

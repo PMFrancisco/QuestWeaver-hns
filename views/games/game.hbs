@@ -4,10 +4,12 @@
     <div class="game-description">
       <p>{{game.description}}</p>
       <p>Created: {{formatDate game.createdAt}}</p>
-      <form action="/games/joinGame" method="post">
-        <input type="hidden" name="gameId" value="{{game.id}}" />
-        <button type="submit">Join Game</button>
-      </form>
+      {{#unless (checkGameStatus game.participants user.id)}}
+        <form action="/games/joinGame" method="post">
+          <input type="hidden" name="gameId" value="{{game.id}}" />
+          <button type="submit">Join Game</button>
+        </form>
+      {{/unless}}
       <form action="/gameInfo/{{game.id}}" method="get">
         <button type="submit">Wiki</button>
       </form>

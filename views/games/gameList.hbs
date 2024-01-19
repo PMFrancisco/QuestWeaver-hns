@@ -1,0 +1,25 @@
+<div class="game-list">
+  {{#each games}}
+    <div class="game-item">
+      <h2><a href="/games/{{this.id}}">{{this.name}}</a></h2>
+      <p>{{this.description}}</p>
+      <p>Created by: {{this.creator.displayName}}</p>
+      <p>Created: {{formatDate this.createdAt}}</p>
+
+      {{#with (checkGameStatus this.participants ../userId)}}
+        {{#if isClickable}}
+          <form action="/games/joinGame" method="post">
+            <input type="hidden" name="gameId" value="{{../this.id}}" />
+            <button type="submit">Join Game</button>
+          </form>
+        {{else}}
+          {{#if (eq status 'pending')}}
+            <button type="button" style="background-color: red;">Pending</button>
+          {{else if (eq status 'playing')}}
+            <button type="button" style="background-color: blue;">Playing</button>
+          {{/if}}
+        {{/if}}
+      {{/with}}
+    </div>
+  {{/each}}
+</div>

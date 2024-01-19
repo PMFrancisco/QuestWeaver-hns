@@ -10,9 +10,11 @@ router.get("/", async (req, res) => {
     const games = await prisma.game.findMany({
       include: {
         creator: true,
+        participants: true,
       },
     });
-    res.render("gameList", { title: "List of games", games });
+
+    res.render("games/gameList", { title: "List of games", games, userId: req.user.id });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error getting the games");
@@ -71,7 +73,7 @@ router.post("/joinGame", async (req, res) => {
     res.redirect(`/games/${gameId}`);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error al unirse a la partida");
+    res.status(500).send("Error joining the game");
   }
 });
 
@@ -126,6 +128,7 @@ router.get("/:id", async (req, res) => {
       acceptedPlayers,
       pendingPlayers,
       isGameCreator,
+      user: req.user
     });
   } catch (error) {
     res.status(500).send("Error getting the game");
