@@ -16,7 +16,7 @@
           {{#if (eq status 'pending')}}
             <button type="button" style="background-color: red;">Pending</button>
           {{else if (eq status 'playing')}}
-            <button type="button" style="background-color: blue;">Playing</button>
+            <a href="/games/{{../this.id}}" class="button playing">Playing</a>          
           {{/if}}
         {{/if}}
       {{/with}}

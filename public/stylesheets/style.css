@@ -32,19 +32,28 @@ textarea {
   border: 1px solid #ddd;
 }
 
-button {
-  display: inline-block;
+.button, button {
   background-color: #333;
   color: #fff;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 4px;
+  text-decoration: none; 
 }
 
-button:hover {
+.button:hover, button:hover {
   background-color: #555;
 }
+
+.button.playing {
+  background-color: blue;
+}
+
+.button.playing:hover {
+  background-color: #003366; 
+}
+
 
 #logo-header {
   max-width: 100px;
