@@ -3,10 +3,41 @@ const prisma = require("../prisma");
 const upload = require("../config/multer");
 const handleUpload = require("../middlewares/handleUpload");
 const router = express.Router();
+/**
+ * @swagger
+ * tags:
+ *   name: Admin
+ */
+
+/**
+ * @swagger
+ * /admin:
+ *   get:
+ *     summary: Admin dashboard
+ *     tags: [Admin]
+ *     description: Renders the admin dashboard.
+ *     responses:
+ *       200:
+ *         description: Admin dashboard page rendered.
+ */
 
 router.get("/", (req, res) => {
   res.render("admin/admin");
 });
+
+/**
+ * @swagger
+ * /admin/users:
+ *   get:
+ *     summary: List all users
+ *     tags: [Admin]
+ *     description: Retrieves and renders a list of all users.
+ *     responses:
+ *       200:
+ *         description: Users list rendered.
+ *       500:
+ *         description: Internal Server Error.
+ */
 
 router.get("/users", async (req, res) => {
   try {
@@ -16,6 +47,29 @@ router.get("/users", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+/**
+ * @swagger
+ * /admin/users/edit/{id}:
+ *   get:
+ *     summary: Edit user page
+ *     tags: [Admin]
+ *     description: Renders the edit user page for a specific user.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: User ID.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Edit user page rendered.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal Server Error.
+ */
 
 router.get("/users/edit/:id", async (req, res) => {
   const userId = req.params.id;
@@ -33,6 +87,48 @@ router.get("/users/edit/:id", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /admin/users/edit/{id}:
+ *   post:
+ *     summary: Edit user
+ *     tags: [Admin]
+ *     description: Updates a user's information.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: User ID.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - email
+ *               - isAdmin
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               isAdmin:
+ *                 type: boolean
+ *     responses:
+ *       302:
+ *         description: Redirects to the users list.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 router.post("/users/edit/:id", async (req, res) => {
   const userId = req.params.id;
   const { firstName, lastName, email, isAdmin } = req.body;
@@ -46,6 +142,37 @@ router.post("/users/edit/:id", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+/**
+ * @swagger
+ * /admin/users/edit/{id}/updateProfilePicture:
+ *   post:
+ *     summary: Update user's profile picture
+ *     tags: [Admin]
+ *     description: Updates the profile picture of a specific user.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: User ID.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               profileImage:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       302:
+ *         description: Redirects to the edit user page.
+ *       500:
+ *         description: Internal Server Error.
+ */
 
 router.post(
   "/users/edit/:id/updateProfilePicture",
@@ -70,6 +197,27 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /admin/users/delete/{id}:
+ *   get:
+ *     summary: Delete user
+ *     tags: [Admin]
+ *     description: Deletes a specific user.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: User ID.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the users list.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 router.get("/users/delete/:id", async (req, res) => {
   const userId = req.params.id;
   try {
@@ -82,6 +230,20 @@ router.get("/users/delete/:id", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /admin/games:
+ *   get:
+ *     summary: List all games
+ *     tags: [Admin]
+ *     description: Retrieves and renders a list of all games.
+ *     responses:
+ *       200:
+ *         description: Games list rendered.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 router.get("/games", async (req, res) => {
   try {
     const games = await prisma.game.findMany();
@@ -90,6 +252,27 @@ router.get("/games", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+/**
+ * @swagger
+ * /admin/games/edit/{id}:
+ *   get:
+ *     summary: Edit game page
+ *     tags: [Admin]
+ *     description: Renders the edit game page for a specific game.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Game ID.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Edit game page rendered.
+ *       500:
+ *         description: Internal Server Error.
+ */
 
 router.get("/games/edit/:id", async (req, res) => {
   const gameId = req.params.id;
@@ -101,6 +284,41 @@ router.get("/games/edit/:id", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+/**
+ * @swagger
+ * /admin/games/edit/{id}:
+ *   post:
+ *     summary: Edit game
+ *     tags: [Admin]
+ *     description: Updates a game's information.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Game ID.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - description
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the games list.
+ *       500:
+ *         description: Internal Server Error.
+ */
 
 router.post("/games/edit/:id", async (req, res) => {
   const gameId = req.params.id;
@@ -117,6 +335,27 @@ router.post("/games/edit/:id", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /admin/games/delete/{id}:
+ *   get:
+ *     summary: Delete game
+ *     tags: [Admin]
+ *     description: Deletes a specific game.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Game ID.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the games list.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 router.get("/games/delete/:id", async (req, res) => {
   const gameId = req.params.id;
   try {
@@ -128,6 +367,20 @@ router.get("/games/delete/:id", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /admin/tokens:
+ *   get:
+ *     summary: List all tokens
+ *     tags: [Admin]
+ *     description: Retrieves and renders a list of all tokens.
+ *     responses:
+ *       200:
+ *         description: Tokens list rendered.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 router.get("/tokens", async (req, res) => {
   try {
     const tokens = await prisma.token.findMany();
@@ -137,6 +390,35 @@ router.get("/tokens", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+/**
+ * @swagger
+ * /admin/tokens/create:
+ *   post:
+ *     summary: Create a new token
+ *     tags: [Admin]
+ *     description: Creates a new token with an image.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - tokenImage
+ *             properties:
+ *               name:
+ *                 type: string
+ *               tokenImage:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       302:
+ *         description: Redirects to the tokens list.
+ *       500:
+ *         description: Internal Server Error.
+ */
 router.post("/tokens/create", upload.single("tokenImage"), async (req, res) => {
   try {
     const b64 = Buffer.from(req.file.buffer).toString("base64");
@@ -156,6 +438,27 @@ router.post("/tokens/create", upload.single("tokenImage"), async (req, res) => {
     res.redirect("/admin/error");
   }
 });
+
+/**
+ * @swagger
+ * /admin/tokens/delete/{id}:
+ *   get:
+ *     summary: Delete token
+ *     tags: [Admin]
+ *     description: Deletes a specific token.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Token ID.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the tokens list.
+ *       500:
+ *         description: Internal Server Error.
+ */
 
 router.get("/tokens/delete/:id", async (req, res) => {
   const tokenId = req.params.id;

@@ -7,6 +7,35 @@ const handleUpload = require("../middlewares/handleUpload");
 const isGameCreator = require("../middlewares/isGameCreator");
 const isAcceptedOrGameCreator = require("../middlewares/isAcceptedOrGameCreator");
 
+/**
+ * @swagger
+ * tags:
+ *   name: Maps
+ */
+
+/**
+ * @swagger
+ * /map/{id}:
+ *   get:
+ *     summary: View game map
+ *     tags: [Maps]
+ *     description: Renders the game map along with tokens.
+ *     security:
+ *       - isAcceptedOrGameCreator: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Game ID.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Game map page rendered.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 router.get("/:id", isAcceptedOrGameCreator, async (req, res) => {
   try {
     const gameId = req.params.id;
@@ -38,6 +67,29 @@ router.get("/:id", isAcceptedOrGameCreator, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /map/getMapData/{gameId}:
+ *   get:
+ *     summary: Get map data
+ *     tags: [Maps]
+ *     description: Retrieves the map data for a specific game.
+ *     parameters:
+ *       - in: path
+ *         name: gameId
+ *         required: true
+ *         description: Game ID.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Map data retrieved.
+ *       404:
+ *         description: No map data found for this game.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 router.get("/getMapData/:gameId", async (req, res) => {
   const gameId = req.params.gameId;
 
@@ -57,6 +109,29 @@ router.get("/getMapData/:gameId", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /map/getTokens/{gameId}:
+ *   get:
+ *     summary: Get game tokens
+ *     tags: [Maps]
+ *     description: Retrieves the tokens for a specific game.
+ *     parameters:
+ *       - in: path
+ *         name: gameId
+ *         required: true
+ *         description: Game ID.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Tokens retrieved.
+ *       404:
+ *         description: No tokens found for this game.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 router.get("/getTokens/:gameId", async (req, res) => {
   const gameId = req.params.gameId;
 
@@ -75,6 +150,37 @@ router.get("/getTokens/:gameId", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+/**
+ * @swagger
+ * /map/uploadMap:
+ *   post:
+ *     summary: Upload game map
+ *     tags: [Maps]
+ *     description: Uploads a map image for a specific game.
+ *     security:
+ *       - isGameCreator: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - mapImage
+ *               - gameId
+ *             properties:
+ *               mapImage:
+ *                 type: string
+ *                 format: binary
+ *               gameId:
+ *                 type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the map page.
+ *       500:
+ *         description: Internal Server Error.
+ */
 
 router.post(
   "/uploadMap",
@@ -123,6 +229,35 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /map/uploadToken:
+ *   post:
+ *     summary: Upload game token
+ *     tags: [Maps]
+ *     description: Uploads a custom token image for a specific game.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - tokenImage
+ *               - gameId
+ *             properties:
+ *               tokenImage:
+ *                 type: string
+ *                 format: binary
+ *               gameId:
+ *                 type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the map page.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 router.post("/uploadToken", upload.single("tokenImage"), async (req, res) => {
   const gameId = req.body.gameId;
 
@@ -145,6 +280,36 @@ router.post("/uploadToken", upload.single("tokenImage"), async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+/**
+ * @swagger
+ * /map/saveMapStatus:
+ *   post:
+ *     summary: Save map status
+ *     tags: [Maps]
+ *     description: Saves the current state of the map and tokens.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - gameId
+ *               - mapData
+ *             properties:
+ *               gameId:
+ *                 type: string
+ *               mapData:
+ *                 type: object
+ *     responses:
+ *       200:
+ *         description: Map status updated successfully.
+ *       404:
+ *         description: Map not found.
+ *       500:
+ *         description: Internal Server Error.
+ */
 
 router.post("/saveMapStatus", async (req, res) => {
   try {

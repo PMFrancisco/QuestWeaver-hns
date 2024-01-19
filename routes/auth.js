@@ -3,13 +3,19 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const passport = require("passport");
 const prisma = require("../prisma");
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ */
 
 /**
  * @swagger
  * /auth/register:
  *   post:
  *     summary: Register a new user
- *     description: Registers a new user by saving their email and hashed password.
+ *     tags: [Auth]
+ *     description: Registers a new user by saving their details.
  *     requestBody:
  *       required: true
  *       content:
@@ -17,13 +23,21 @@ const prisma = require("../prisma");
  *           schema:
  *             type: object
  *             required:
- *               - username
+ *               - firstName
+ *               - lastName
+ *               - displayName
  *               - email
  *               - password
  *             properties:
- *               name:
- *                 type:  string
- *                 description: User's username
+ *               firstName:
+ *                 type: string
+ *                 description: User's first name.
+ *               lastName:
+ *                 type: string
+ *                 description: User's last name.
+ *               displayName:
+ *                 type: string
+ *                 description: User's display name.
  *               email:
  *                 type: string
  *                 format: email
@@ -33,11 +47,14 @@ const prisma = require("../prisma");
  *                 format: password
  *                 description: User's password.
  *     responses:
- *       302:
- *         description: Redirects to the login page on success.
+ *       201:
+ *         description: User successfully registered.
+ *       400:
+ *         description: Invalid request parameters.
  *       500:
- *         description: Redirects to the registration page on error.
+ *         description: Server error.
  */
+
 router.post("/register", async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -60,8 +77,9 @@ router.post("/register", async (req, res) => {
  * @swagger
  * /auth/login:
  *   post:
- *     summary: Authenticate user
- *     description: Logs in a user using email and password.
+ *     summary: User login
+ *     tags: [Auth]
+ *     description: Authenticates a user and starts a session.
  *     requestBody:
  *       required: true
  *       content:
@@ -82,8 +100,11 @@ router.post("/register", async (req, res) => {
  *                 description: User's password.
  *     responses:
  *       302:
- *         description: Redirects to the home page on success, login page on failure.
+ *         description: Redirects to the homepage on successful login.
+ *       401:
+ *         description: Authentication failed.
  */
+
 router.post(
   "/login",
   passport.authenticate("local", {
@@ -98,11 +119,13 @@ router.post(
  * /auth/login-page:
  *   get:
  *     summary: Login page
+ *     tags: [Auth] 
  *     description: Renders the login page.
  *     responses:
  *       200:
- *         description: Returns the login page.
+ *         description: Login page rendered.
  */
+
 router.get("/login-page", (req, res) => {
   res.render("login", { error: req.flash("error") });
 });
@@ -112,19 +135,45 @@ router.get("/login-page", (req, res) => {
  * /auth/register-page:
  *   get:
  *     summary: Registration page
+ *     tags: [Auth]
  *     description: Renders the registration page.
  *     responses:
  *       200:
- *         description: Returns the registration page.
+ *         description: Registration page rendered.
  */
+
 router.get("/register-page", (req, res) => {
   res.render("register", { error: req.flash("error") });
 });
+
+/**
+ * @swagger
+ * /auth/google:
+ *   get:
+ *     summary: Google Authentication
+ *     tags: [Auth] 
+ *     description: Initiates authentication using Google account.
+ *     responses:
+ *       302:
+ *         description: Redirects to Google authentication.
+ */
 
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
+
+/**
+ * @swagger
+ * /auth/google/callback:
+ *   get:
+ *     summary: Google Auth Callback
+ *     tags: [Auth] 
+ *     description: Callback route for Google authentication.
+ *     responses:
+ *       302:
+ *         description: Redirects to profile page on success or login page on failure.
+ */
 
 router.get(
   "/google/callback",
@@ -133,6 +182,18 @@ router.get(
     res.redirect("/profile");
   }
 );
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   get:
+ *     summary: User logout
+ *     tags: [Auth]
+ *     description: Logs out the current user.
+ *     responses:
+ *       302:
+ *         description: Redirects to the homepage.
+ */
 
 router.get("/logout", (req, res) => {
   req.logout(function (err) {
