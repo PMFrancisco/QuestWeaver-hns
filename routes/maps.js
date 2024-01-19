@@ -222,7 +222,7 @@ router.post(
         });
       }
 
-      res.redirect(`/map/${gameId}`);
+      res.redirect(`back`);
     } catch (error) {
       res.redirect("/error");
     }

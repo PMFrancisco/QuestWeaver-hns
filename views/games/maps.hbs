@@ -1,13 +1,17 @@
-<div id="game-board">
-</div>
+{{#if mapUrl}}
+  <div id="game-board">
+  </div>
 
-<div id="tokenList">
-  {{#each tokens}}
-    <button class="tokenButton" tokenImageUrl="{{this.imageUrl}}">
-      <img src="{{this.imageUrl}}" alt="{{this.name}}" />
-    </button>
-  {{/each}}
-</div>
+  <div id="tokenList">
+    {{#each tokens}}
+      <button class="tokenButton" tokenImageUrl="{{this.imageUrl}}">
+        <img src="{{this.imageUrl}}" alt="{{this.name}}" />
+      </button>
+    {{/each}}
+  </div>
+{{else}}
+  <p>Hurry up and create your own tabletop!</p>
+{{/if}}
 
 <div id="control-panel">
   <form action="/map/uploadMap" method="POST" enctype="multipart/form-data">
