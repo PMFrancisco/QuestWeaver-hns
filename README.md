@@ -67,7 +67,7 @@ DATABASE_URL=your_database_url
 SESSION_SECRET=your_session_secret
 GMAIL_USER=your_gmail_email
 GMAIL_PASS=your_gmail_password
-
+```
 
 
 ## Tests
