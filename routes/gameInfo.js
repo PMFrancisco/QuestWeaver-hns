@@ -124,7 +124,7 @@ router.get("/edit/:gameInfoId", async (req, res) => {
 /**
  * @swagger
  * /update/{gameInfoId}:
- *   post:
+ *   put:
  *     summary: Update GameInfo
  *     tags: [GameInfo]
  *     description: Updates the information of a specific GameInfo.
@@ -176,7 +176,7 @@ router.post("/update/:gameInfoId", async (req, res) => {
 /**
  * @swagger
  * /delete/{gameInfoId}:
- *   get:
+ *   delete:
  *     summary: Delete GameInfo
  *     tags: [GameInfo]
  *     description: Deletes a specific GameInfo entry.
@@ -375,7 +375,7 @@ router.post("/addCategory", async (req, res) => {
 /**
  * @swagger
  * /deleteCategory/{categoryId}:
- *   get:
+ *   delete:
  *     summary: Delete Category
  *     tags: [GameInfo]
  *     description: Deletes a specific category.

@@ -283,7 +283,7 @@ router.post("/uploadToken", upload.single("tokenImage"), async (req, res) => {
 /**
  * @swagger
  * /map/saveMapStatus:
- *   post:
+ *   put:
  *     summary: Save map status
  *     tags: [Maps]
  *     description: Saves the current state of the map and tokens.

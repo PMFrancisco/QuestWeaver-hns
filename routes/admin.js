@@ -90,7 +90,7 @@ router.get("/users/edit/:id", async (req, res) => {
 /**
  * @swagger
  * /admin/users/edit/{id}:
- *   post:
+ *   put:
  *     summary: Edit user
  *     tags: [Admin]
  *     description: Updates a user's information.
@@ -146,7 +146,7 @@ router.post("/users/edit/:id", async (req, res) => {
 /**
  * @swagger
  * /admin/users/edit/{id}/updateProfilePicture:
- *   post:
+ *   put:
  *     summary: Update user's profile picture
  *     tags: [Admin]
  *     description: Updates the profile picture of a specific user.
@@ -288,7 +288,7 @@ router.get("/games/edit/:id", async (req, res) => {
 /**
  * @swagger
  * /admin/games/edit/{id}:
- *   post:
+ *   put:
  *     summary: Edit game
  *     tags: [Admin]
  *     description: Updates a game's information.
@@ -338,7 +338,7 @@ router.post("/games/edit/:id", async (req, res) => {
 /**
  * @swagger
  * /admin/games/delete/{id}:
- *   get:
+ *   delete:
  *     summary: Delete game
  *     tags: [Admin]
  *     description: Deletes a specific game.
@@ -442,7 +442,7 @@ router.post("/tokens/create", upload.single("tokenImage"), async (req, res) => {
 /**
  * @swagger
  * /admin/tokens/delete/{id}:
- *   get:
+ *   delete:
  *     summary: Delete token
  *     tags: [Admin]
  *     description: Deletes a specific token.

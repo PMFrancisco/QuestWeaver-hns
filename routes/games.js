@@ -155,7 +155,7 @@ router.post("/joinGame", async (req, res) => {
 /**
  * @swagger
  * /games/acceptPlayer:
- *   post:
+ *   put:
  *     summary: Accept a player in a game
  *     tags: [Games]
  *     description: Accepts a player's request to join a game.

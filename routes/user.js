@@ -101,7 +101,7 @@ router.put("/edit", async (req, res) => {
 /**
  * @swagger
  * /profile/updateProfilePicture:
- *   post:
+ *   put:
  *     summary: Update profile picture
  *     tags: [User]
  *     description: Uploads and updates the user's profile picture.
